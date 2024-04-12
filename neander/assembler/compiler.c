@@ -1,24 +1,38 @@
-// gcc neander_compiler.c -o neander_compiler.out && ./neander_compiler.out neander_asm.asm
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../libs/j_strings.h"
-#include "../libs/j_transform.h"
-#include "../libs/j_linkedList.h"
+#include "../../libs/j_strings.h"
+#include "../../libs/j_transform.h"
+#include "../../libs/j_linkedList.h"
 
-#define maxchar 16
+#define maxchar 32
 
 int main(int argc, char **argv)
 {
+    char *name_file_output = "neander.mem";
+
     // leitor de argumentos
     FILE *FPTR = 0;
-     for (int i = 1; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         // arquivo a ser compilado
         if (argv[i][0] != '-')
         {
             FPTR = fopen(argv[i], "r");
+        }
+
+        // define saída
+        else if (str_match(argv[i], "-o"))
+        {
+            int arg_size = 1;
+            if (argc <= i+arg_size)
+            {
+                printf("Argumento inválido\n");
+                return 1;
+            }
+
+            i++;
+            name_file_output = argv[i];
         }
     }
 
@@ -258,14 +272,14 @@ int main(int argc, char **argv)
     if (stop)
         return 0; // sem desalocar NADA AAA
 
-    /**    printagem das árvores
+    ///*    printagem das árvores
     char *list_str = list_toString(list_label);
     printf("\n%s", list_str);
     libera(list_str);
 
     list_str = list_toString(list_placeholder);
     printf("\n%s", list_str);
-    libera(list_str);*/
+    libera(list_str);/**/
     
     // resolve as labels dependentes (placeholders)
     int labels_unresolved_count = 0;
@@ -314,30 +328,32 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < 256; i++) 
     {
-        int val = MEM[i];
-        if ( (val == 16)
-            || (val == 32)
-            || (val == 48)
-            || (val == 64)
-            || (val == 80))
+        if (i < index_mem_data_start) 
         {
-            printf("\n %d : %d", MEM[i+1], index_mem_data_start);
-            MEM[i+1] = MEM[i+1] + index_mem_data_start;
-            i+=1;
-        }
+            int val = MEM[i];
+            if ( (val == 16)
+                || (val == 32)
+                || (val == 48)
+                || (val == 64)
+                || (val == 80))
+            {
+                MEM[i+1] = MEM[i+1] + index_mem_data_start;
+                i+=1;
+            }
 
-        // pula jumps para não interferirem em labels
-        else if ( (val == 128)
-            || (val == 144)
-            || (val == 160))
-        {
-            i+=2;
+            // pula jumps para não interferirem em labels
+            else if ( (val == 128)
+                || (val == 144)
+                || (val == 160))
+            {
+                i+=1;
+            }
         }
     }
 
     // grava o arquivo como .mem
     
-    FPTR = fopen("./neander_bin.mem","w");
+    FPTR = fopen(name_file_output,"w+");
     char FILE_MEM[516];
     str_clr(FILE_MEM, 516);
     FILE_MEM[0] = 0x03;
@@ -350,4 +366,5 @@ int main(int argc, char **argv)
         FILE_MEM[4+(2*i)] = MEM[i];   
     }
     fwrite(FILE_MEM, 1, 516, FPTR);
+    fclose(FPTR);
 }
