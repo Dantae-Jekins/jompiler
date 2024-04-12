@@ -1,0 +1,191 @@
+
+ Parsing: 
+ 3 * (2 + (2 - 3))
+ Tokens identificados:
+ { 3, *, (, 2, +, (, 2, -, 3, ), ), END }
+
+ Começando construção de assembly
+ Num: 3 alocado na memória em 0
+ Num: 2 alocado na memória em 3
+ Num: 2 alocado na memória em 4
+ Num: 3 alocado na memória em 6
+ Add: num[3] = num[3] + num[4]
+
+ Término correto com tokens tratados:
+ Arquivo gerado: 
+
+0 <- 3 
+3 <- 2 
+4 <- 2 
+6 <- 3 
+5 <- 1
+LDA 6
+NOT
+ADD 5
+ADD 4
+STA 4
+
+LDA 3
+ADD 4
+STA 3
+
+1 <- 255
+2 <- 0
+label0_start: 
+LDA 0
+JZ label0_end 
+ADD 1
+STA 0
+LDA 2
+ADD 3
+STA 2
+JMP label0_start 
+label0_end: 
+LDA 2
+STA 0
+30 <- 0
+LDA 0
+STA 30
+
+ l:000: 0 <- 3
+ l:001: 3 <- 2
+ l:002: 4 <- 2
+ l:003: 6 <- 3
+ l:004: 5 <- 1
+ l:005: LDA 6 	 -> 32 DATA[6]
+ l:006: NOT 	 -> 96
+ l:007: ADD 5 	 -> 48 DATA[5]
+ l:008: ADD 4 	 -> 48 DATA[4]
+ l:009: STA 4 	 -> 16 DATA[4]
+ l:010:
+ l:011: LDA 3 	 -> 32 DATA[3]
+ l:012: ADD 4 	 -> 48 DATA[4]
+ l:013: STA 3 	 -> 16 DATA[3]
+ l:014:
+ l:015: 1 <- 255
+ l:016: 2 <- 0
+ l:017: label0_start: 	 -> 15
+ l:018: LDA 0 	 -> 32 DATA[0]
+ l:019: JZ label0_end 	 -> 160 LABEL['label0_end']
+ l:020: ADD 1 	 -> 48 DATA[1]
+ l:021: STA 0 	 -> 16 DATA[0]
+ l:022: LDA 2 	 -> 32 DATA[2]
+ l:023: ADD 3 	 -> 48 DATA[3]
+ l:024: STA 2 	 -> 16 DATA[2]
+ l:025: JMP label0_start 	 -> 128 LABEL['label0_start']
+ l:026: label0_end: 	 -> 32
+ l:027: LDA 2 	 -> 32 DATA[2]
+ l:028: STA 0 	 -> 16 DATA[0]
+ l:029: 30 <- 0
+ l:030: LDA 0 	 -> 32 DATA[0]
+ l:031: STA 30 	 -> 16 DATA[30]
+ l:032:
+{ (32, label0_end), (15, label0_start) }
+{ (31, label0_start), (19, label0_end) }
+JEANDER running code
+
+
+MEMÓRIA ENTRADA: ----------------------------------------------------------------
+CODE BLOCK ---
+addr 000 : LDA 231
+addr 001 : 231
+addr 002 : NOT
+addr 003 : ADD 230
+addr 004 : 230
+addr 005 : ADD 229
+addr 006 : 229
+addr 007 : STA 229
+addr 008 : 229
+addr 009 : LDA 228
+addr 010 : 228
+addr 011 : ADD 229
+addr 012 : 229
+addr 013 : STA 228
+addr 014 : 228
+addr 015 : NOP ---
+addr 016 : LDA 225
+addr 017 : 225
+addr 018 : JZ 32
+addr 019 : LDA 48
+addr 020 : ADD 226
+addr 021 : 226
+addr 022 : STA 225
+addr 023 : 225
+addr 024 : LDA 227
+addr 025 : 227
+addr 026 : ADD 228
+addr 027 : 228
+addr 028 : STA 227
+addr 029 : 227
+addr 030 : JMP 15
+addr 031 : 15
+addr 032 : NOP ---
+addr 033 : LDA 227
+addr 034 : 227
+addr 035 : STA 225
+addr 036 : 225
+addr 037 : LDA 225
+addr 038 : 225
+addr 039 : STA 255
+addr 040 : 255
+addr 041 : NOP ---
+ .  .  .
+
+DATA BLOCK ---
+ADDR |00  |01  |02  |03  |04  |05  |06  |07  |08  |09  |0A  |0B  |0C  |0D  |0E  |0F  |
+ 208 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |
+ 224 |000 |003 |255 |000 |002 |002 |001 |003 |000 |000 |000 |000 |000 |000 |000 |000 |
+ 240 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |
+
+
+MEMÓRIA SAÍDA: ------------------------------------------------------------------
+CODE BLOCK ---
+addr 000 : LDA 231
+addr 001 : 231
+addr 002 : NOT
+addr 003 : ADD 230
+addr 004 : 230
+addr 005 : ADD 229
+addr 006 : 229
+addr 007 : STA 229
+addr 008 : 229
+addr 009 : LDA 228
+addr 010 : 228
+addr 011 : ADD 229
+addr 012 : 229
+addr 013 : STA 228
+addr 014 : 228
+addr 015 : NOP ---
+addr 016 : LDA 225
+addr 017 : 225
+addr 018 : JZ 32
+addr 019 : LDA 48
+addr 020 : ADD 226
+addr 021 : 226
+addr 022 : STA 225
+addr 023 : 225
+addr 024 : LDA 227
+addr 025 : 227
+addr 026 : ADD 228
+addr 027 : 228
+addr 028 : STA 227
+addr 029 : 227
+addr 030 : JMP 15
+addr 031 : 15
+addr 032 : NOP ---
+addr 033 : LDA 227
+addr 034 : 227
+addr 035 : STA 225
+addr 036 : 225
+addr 037 : LDA 225
+addr 038 : 225
+addr 039 : STA 255
+addr 040 : 255
+addr 041 : NOP ---
+ .  .  .
+
+DATA BLOCK ---
+ADDR |00  |01  |02  |03  |04  |05  |06  |07  |08  |09  |0A  |0B  |0C  |0D  |0E  |0F  |
+ 208 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |
+ 224 |000 |003 |255 |003 |001 |255 |001 |003 |000 |000 |000 |000 |000 |000 |000 |000 |
+ 240 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |000 |003 |
